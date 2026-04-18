@@ -1,17 +1,23 @@
 import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription
+from launch.actions import GroupAction, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch_ros.actions import Node
+from launch_ros.actions import Node, SetRemap
 
 def generate_launch_description():
-    # 1. Path to Velodyne Driver (Standard driver for your LIDAR)
-    velodyne_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(get_package_share_directory('velodyne'), 'launch', 'velodyne_pointcloud-VLP16-launch.py')
+    # 1. Velodyne driver + pointcloud nodes.
+    # Wrapped in a GroupAction that remaps /scan -> /velodyne_scan_raw so the built-in
+    # velodyne_laserscan node doesn't publish on /scan and conflict with our
+    # pointcloud_to_laserscan output below.
+    velodyne_launch = GroupAction([
+        SetRemap(src='/scan', dst='/velodyne_scan_raw'),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                os.path.join(get_package_share_directory('velodyne'), 'launch', 'velodyne-all-nodes-VLP16-launch.py')
+            )
         )
-    )
+    ])
 
     pc_to_scan_node = Node(
         package='pointcloud_to_laserscan',
