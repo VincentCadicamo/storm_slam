@@ -1,0 +1,16 @@
+slam_toolbox:
+  ros__parameters:
+    # Frame Overrides
+    odom_frame: odom
+    base_frame: base_link  # Robot base frame; SLAM Toolbox publishes odom -> base_link
+    scan_topic: /scan
+
+    # Hand-held Motion Tuning
+    mode: mapping
+    use_scan_matching: true
+    minimum_travel_distance: 0.1
+    minimum_travel_heading: 0.1
+
+    # Fast Processing for smooth maps
+    scan_queue_size: 1
+    transform_timeout: 0.2
