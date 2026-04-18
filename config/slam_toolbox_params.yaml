@@ -34,5 +34,5 @@ slam_toolbox:
     map_update_interval: 1.0  # seconds between occupancy grid publishes (default is ~20s)
     scan_queue_size: 1
     transform_timeout: 0.2
-    laser_max_range: 10.0
-    laser_min_range: 0.3
+    minimum_laser_range: 0.3
+    maximum_laser_range: 10.0
