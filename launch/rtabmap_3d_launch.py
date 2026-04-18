@@ -73,6 +73,8 @@ def generate_launch_description():
             'Grid/CellSize': '0.05',           # 5cm map resolution
             # Map update rate
             'Rtabmap/DetectionRate': '1.0',    # loop closure check every 1s
+            'Vis/MaxFeatures': '0',            # disable visual features (no camera)
+            'Optimizer/GravitySigma': '0',     # disable IMU gravity constraint (no IMU)
         }],
         remappings=[
             ('scan_cloud', '/velodyne_points'),
