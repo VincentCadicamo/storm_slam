@@ -15,6 +15,22 @@ slam_toolbox:
     minimum_travel_distance: 0.0
     minimum_travel_heading: 0.0
 
+    # Scan Matcher Search Space
+    # With no odometry there is no motion prior, so the search window must be wide enough
+    # to cover the distance moved between consecutive scans during handheld motion.
+    # 1.0m means the matcher searches +/-0.5m around the last known pose each scan.
+    correlation_search_space_dimension: 1.0
+    correlation_search_space_resolution: 0.01
+    correlation_search_space_smear_deviation: 0.1
+
+    # Loop Closure — corrects accumulated drift when you revisit a mapped area
+    do_loop_closing: true
+    loop_search_maximum_distance: 3.0
+    loop_match_minimum_chain_size: 10
+    loop_match_minimum_response_coarse: 0.35
+    loop_match_minimum_response_fine: 0.45
+
     # Fast Processing for smooth maps
+    map_update_interval: 1.0  # seconds between occupancy grid publishes (default is ~20s)
     scan_queue_size: 1
     transform_timeout: 0.2
