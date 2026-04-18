@@ -9,7 +9,7 @@ def generate_launch_description():
     # 1. Path to Velodyne Driver (Standard driver for your LIDAR)
     velodyne_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(get_package_share_directory('velodyne_adapter'), 'launch', 'velodyne_vlp16_launch.py')
+            os.path.join(get_package_share_directory('velodyne'), 'launch', 'velodyne-all-nodes-VLP16-launch.py')
         )
     )
 
