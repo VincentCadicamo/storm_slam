@@ -55,8 +55,11 @@ def generate_launch_description():
         parameters=[{
             'frame_id': 'base_link',
             'subscribe_depth': False,
+            'subscribe_rgb': False,
             'subscribe_scan_cloud': True,
+            'subscribe_odom_info': False,   # only sync odom + scan_cloud (2-way), not odom_info
             'approx_sync': True,
+            'queue_size': 10,
             'wait_for_transform': 0.2,
             # Loop closure and proximity detection
             'RGBD/NeighborLinkRefining': 'true',
