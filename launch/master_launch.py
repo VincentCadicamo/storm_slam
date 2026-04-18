@@ -24,6 +24,7 @@ def generate_launch_description():
             'max_height': 0.1,   # only at the height of your LIDAR
             'angle_min': -3.1415,
             'angle_max': 3.1415,
+            'angle_increment': 0.017453,  # 1 degree in radians (pi/180); gives exactly 360 readings
             'range_min': 0.3,
             'range_max': 50.0,
             'use_inf': True
