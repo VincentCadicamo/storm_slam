@@ -10,7 +10,7 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <exec_depend>slam_toolbox</exec_depend>
-  <exec_depend>velodyne_adapter</exec_depend>
+  <exec_depend>velodyne</exec_depend>
   <exec_depend>pointcloud_to_laserscan</exec_depend>
   <exec_depend>tf2_ros</exec_depend>
 

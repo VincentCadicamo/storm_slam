@@ -1,15 +1,19 @@
 slam_toolbox:
   ros__parameters:
     # Frame Overrides
+    map_frame: map
     odom_frame: odom
-    base_frame: base_link  # Robot base frame; SLAM Toolbox publishes odom -> base_link
+    base_frame: base_link
     scan_topic: /scan
 
     # Hand-held Motion Tuning
     mode: mapping
     use_scan_matching: true
-    minimum_travel_distance: 0.1
-    minimum_travel_heading: 0.1
+    # Set to 0.0 because odom->base_link is a static identity transform (no real odometry).
+    # A non-zero threshold would cause SLAM Toolbox to skip every scan since odometry
+    # always reports zero travel distance.
+    minimum_travel_distance: 0.0
+    minimum_travel_heading: 0.0
 
     # Fast Processing for smooth maps
     scan_queue_size: 1
