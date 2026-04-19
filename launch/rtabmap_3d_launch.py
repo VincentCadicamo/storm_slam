@@ -39,6 +39,8 @@ def generate_launch_description():
             'Icp/MaxTranslation': '1.0',       # reject jumps > 1m between scans
             'Odom/ScanKeyFrameThr': '0.9',     # add keyframe when 90% of points change
             'Odom/Strategy': '0',              # frame-to-map odometry
+            'scan_range_min': 0.3,             # match VLP16 minimum range
+            'scan_range_max': 25.0,            # match indoor range limit
         }],
         remappings=[
             ('scan_cloud', '/velodyne_points'),
@@ -54,6 +56,7 @@ def generate_launch_description():
         output='screen',
         parameters=[{
             'frame_id': 'base_link',
+            'database_path': '~/.ros/storm_slam_map.db',  # explicit save location
             'subscribe_depth': False,
             'subscribe_rgb': False,
             'subscribe_scan_cloud': True,
@@ -74,6 +77,12 @@ def generate_launch_description():
             'Grid/RangeMin': '0.3',
             'Grid/RangeMax': '25.0',
             'Grid/CellSize': '0.05',           # 5cm map resolution
+            'cloud_min_height': '-0.1',        # filter points more than 10cm below ground
+            'cloud_max_height': '3.0',         # filter points above 3m
+            # Memory management for large building mapping
+            'Mem/STMSize': '30',               # keep 30 nodes in short-term memory (default 10)
+            'Mem/NotLinkedNodesKept': 'false', # discard unlinked nodes to save RAM
+            'cloud_voxel_size': '0.05',        # 5cm voxels in saved cloud map (keeps file size down)
             # Map update rate
             'Rtabmap/DetectionRate': '1.0',    # loop closure check every 1s
             'Vis/MaxFeatures': '0',            # disable visual features (no camera)
