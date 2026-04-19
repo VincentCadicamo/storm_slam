@@ -69,13 +69,15 @@ def generate_launch_description():
             # Loop closure and proximity detection
             'RGBD/NeighborLinkRefining': 'true',
             'RGBD/ProximityBySpace': 'true',
+            'RGBD/ProximityByTime': 'false',
             'RGBD/ProximityMaxGraphDepth': '0',
-            'RGBD/ProximityPathMaxNeighbors': '10', # search 10 neighbors for proximity detection
-            'Icp/CorrespondenceRatio': '0.01',      # accept weak ICP matches for loop closure
+            'RGBD/ProximityPathMaxNeighbors': '10',
+            'Icp/CorrespondenceRatio': '0.01',
+            'Optimizer/Robust': 'true',             # reject bad loop closures to avoid map corruption
             # Use ICP for scan-to-map registration
             'Reg/Strategy': '1',
             'Icp/VoxelSize': '0.1',
-            'Icp/MaxCorrespondenceDistance': '0.1',
+            'Icp/MaxCorrespondenceDistance': '0.5',  # wider tolerance for loop closure ICP (handles drift)
             # Range limits matching VLP16 / indoor environment
             'Grid/RangeMin': '0.3',
             'Grid/RangeMax': '25.0',
