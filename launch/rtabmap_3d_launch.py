@@ -40,7 +40,7 @@ def generate_launch_description():
             'Icp/CorrespondenceRatio': '0.01', # accept sparse correspondences in corridors
             'Odom/ScanKeyFrameThr': '0.9',     # add keyframe when 90% of points change
             'Odom/Strategy': '0',              # frame-to-map odometry
-            'scan_normal_k': '20',             # use 20 neighbors for normal estimation (default 5)
+            'scan_normal_k': 20,               # use 20 neighbors for normal estimation (default 5)
             'scan_range_min': 0.3,             # match VLP16 minimum range
             'scan_range_max': 25.0,            # match indoor range limit
         }],
@@ -64,7 +64,7 @@ def generate_launch_description():
             'subscribe_scan_cloud': True,
             'subscribe_odom_info': False,   # only sync odom + scan_cloud (2-way), not odom_info
             'approx_sync': True,
-            'queue_size': 10,
+            'sync_queue_size': 10,
             'wait_for_transform': 0.2,
             # Loop closure and proximity detection
             'RGBD/NeighborLinkRefining': 'true',
