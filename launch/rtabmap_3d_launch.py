@@ -33,12 +33,14 @@ def generate_launch_description():
             'wait_for_transform': 0.2,
             # ICP tuning for slow indoor cart with VLP16
             'Icp/PointToPlane': 'true',
-            'Icp/Iterations': '10',
+            'Icp/Iterations': '30',            # more iterations = more accurate in corridors
             'Icp/VoxelSize': '0.1',           # downsample to 10cm voxels for speed
-            'Icp/MaxCorrespondenceDistance': '0.1',
+            'Icp/MaxCorrespondenceDistance': '0.2',  # slightly larger to handle corridor drift
             'Icp/MaxTranslation': '1.0',       # reject jumps > 1m between scans
+            'Icp/CorrespondenceRatio': '0.01', # accept sparse correspondences in corridors
             'Odom/ScanKeyFrameThr': '0.9',     # add keyframe when 90% of points change
             'Odom/Strategy': '0',              # frame-to-map odometry
+            'scan_normal_k': '20',             # use 20 neighbors for normal estimation (default 5)
             'scan_range_min': 0.3,             # match VLP16 minimum range
             'scan_range_max': 25.0,            # match indoor range limit
         }],
@@ -68,7 +70,8 @@ def generate_launch_description():
             'RGBD/NeighborLinkRefining': 'true',
             'RGBD/ProximityBySpace': 'true',
             'RGBD/ProximityMaxGraphDepth': '0',
-            'RGBD/ProximityPathMaxNeighbors': '1',
+            'RGBD/ProximityPathMaxNeighbors': '10', # search 10 neighbors for proximity detection
+            'Icp/CorrespondenceRatio': '0.01',      # accept weak ICP matches for loop closure
             # Use ICP for scan-to-map registration
             'Reg/Strategy': '1',
             'Icp/VoxelSize': '0.1',
