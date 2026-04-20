@@ -7,6 +7,7 @@ from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, Command, EqualsSubstitution
 from launch_ros.actions import Node
+from launch_ros.parameter_descriptions import ParameterValue
 
 
 def generate_launch_description():
@@ -40,9 +41,10 @@ def generate_launch_description():
     )
 
     # 2. robot_state_publisher — publishes fixed TFs from URDF (base_link→velodyne etc.)
-    robot_description = Command([
-        'xacro ', os.path.join(pkg, 'urdf', 'storm_robot.urdf.xacro')
-    ])
+    robot_description = ParameterValue(
+        Command(['xacro ', os.path.join(pkg, 'urdf', 'storm_robot.urdf.xacro')]),
+        value_type=str
+    )
     rsp = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
