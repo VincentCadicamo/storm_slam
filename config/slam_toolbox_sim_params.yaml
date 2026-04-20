@@ -1,0 +1,37 @@
+slam_toolbox:
+  ros__parameters:
+    use_sim_time: true
+
+    # Frame configuration
+    map_frame: map
+    odom_frame: odom
+    base_frame: base_link
+    scan_topic: /scan
+
+    # Mapping mode
+    mode: mapping
+    use_scan_matching: true
+
+    # Real wheel odometry is available in simulation (diff drive plugin),
+    # so use non-zero travel thresholds to skip redundant scans.
+    minimum_travel_distance: 0.1
+    minimum_travel_heading: 0.0872  # ~5 degrees
+
+    # Narrower search window vs real-robot params since we have odom as a prior
+    correlation_search_space_dimension: 0.3
+    correlation_search_space_resolution: 0.01
+    correlation_search_space_smear_deviation: 0.05
+
+    # Loop closure
+    do_loop_closing: true
+    loop_search_maximum_distance: 3.0
+    loop_match_minimum_chain_size: 10
+    loop_match_minimum_response_coarse: 0.35
+    loop_match_minimum_response_fine: 0.45
+
+    # Map update and processing
+    map_update_interval: 1.0
+    scan_queue_size: 1
+    transform_timeout: 0.2
+    minimum_laser_range: 0.3
+    maximum_laser_range: 25.0

@@ -1,0 +1,45 @@
+# ros_gz_bridge topic configuration for storm_slam Gazebo Harmonic simulation.
+# All Gazebo-side topic names must match exactly what the plugins publish.
+
+# Simulation clock — mandatory for all nodes using use_sim_time: true
+- ros_topic_name: "/clock"
+  gz_topic_name: "/clock"
+  ros_type_name: "rosgraph_msgs/msg/Clock"
+  gz_type_name: "gz.msgs.Clock"
+  direction: GZ_TO_ROS
+
+# VLP16 point cloud — GPU lidar publishes PointCloudPacked on the gz side
+- ros_topic_name: "/velodyne_points"
+  gz_topic_name: "/velodyne_points"
+  ros_type_name: "sensor_msgs/msg/PointCloud2"
+  gz_type_name: "gz.msgs.PointCloudPacked"
+  direction: GZ_TO_ROS
+
+# Wheel odometry from diff drive plugin
+- ros_topic_name: "/odom"
+  gz_topic_name: "/model/storm_robot/odometry"
+  ros_type_name: "nav_msgs/msg/Odometry"
+  gz_type_name: "gz.msgs.Odometry"
+  direction: GZ_TO_ROS
+
+# odom->base_link dynamic transform from diff drive plugin
+# Must use gz.msgs.Pose_V (plural) — gz.msgs.Pose (singular) is wrong and silently breaks TF
+- ros_topic_name: "/tf"
+  gz_topic_name: "/model/storm_robot/tf"
+  ros_type_name: "tf2_msgs/msg/TFMessage"
+  gz_type_name: "gz.msgs.Pose_V"
+  direction: GZ_TO_ROS
+
+# Joint states for robot_state_publisher (wheel angles)
+- ros_topic_name: "/joint_states"
+  gz_topic_name: "/world/storm_world/model/storm_robot/joint_state"
+  ros_type_name: "sensor_msgs/msg/JointState"
+  gz_type_name: "gz.msgs.Model"
+  direction: GZ_TO_ROS
+
+# Teleop velocity commands — ROS2→Gazebo
+- ros_topic_name: "/cmd_vel"
+  gz_topic_name: "/model/storm_robot/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
