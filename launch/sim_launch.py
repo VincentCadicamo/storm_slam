@@ -83,6 +83,32 @@ def generate_launch_description():
         output='screen'
     )
 
+    # 5. PS4 controller — joy_node reads the device, teleop_twist_joy converts to /cmd_vel
+    joy_node = Node(
+        package='joy',
+        executable='joy_node',
+        name='joy_node',
+        parameters=[{
+            'device_id': 0,
+            'use_sim_time': use_sim_time
+        }]
+    )
+
+    teleop_joy = Node(
+        package='teleop_twist_joy',
+        executable='teleop_node',
+        name='teleop_twist_joy',
+        parameters=[{
+            'axis_linear.x': 1,       # left stick up/down → forward/back
+            'axis_angular.yaw': 3,    # right stick left/right → turn
+            'scale_linear.x': 0.5,   # max 0.5 m/s
+            'scale_angular.yaw': 1.0, # max 1.0 rad/s
+            'enable_button': 4,       # L1 — must hold to move (deadman switch)
+            'enable_turbo_button': 5, # R1 — hold for 2× speed
+            'use_sim_time': use_sim_time
+        }]
+    )
+
     # 5. RViz with pre-configured displays (map, scan, point cloud, robot model, odom)
     rviz = Node(
         package='rviz2',
@@ -129,6 +155,8 @@ def generate_launch_description():
         rsp,
         spawn_robot,
         bridge,
+        joy_node,
+        teleop_joy,
         rviz,
         slam_2d,
         slam_3d,
