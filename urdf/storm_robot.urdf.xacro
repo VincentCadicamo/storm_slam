@@ -78,8 +78,8 @@
     <axis xyz="0 1 0"/>
   </joint>
 
-  <!-- Caster — fixed box instead of sphere to avoid DART physics assertion -->
-  <link name="caster_link">
+  <!-- Front caster -->
+  <link name="caster_front_link">
     <visual>
       <geometry><box size="0.1 0.1 0.1"/></geometry>
       <material name="grey"/>
@@ -93,10 +93,31 @@
     </inertial>
   </link>
 
-  <joint name="caster_joint" type="fixed">
+  <joint name="caster_front_joint" type="fixed">
     <parent link="base_link"/>
-    <child link="caster_link"/>
+    <child link="caster_front_link"/>
     <origin xyz="0.25 0 -0.05" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Rear caster -->
+  <link name="caster_rear_link">
+    <visual>
+      <geometry><box size="0.1 0.1 0.1"/></geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <geometry><box size="0.1 0.1 0.1"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <joint name="caster_rear_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="caster_rear_link"/>
+    <origin xyz="-0.25 0 -0.05" rpy="0 0 0"/>
   </joint>
 
   <!-- VLP-16: mounting plate -->
@@ -181,8 +202,13 @@
     </plugin>
   </gazebo>
 
-  <!-- Low friction on caster so it doesn't resist turning -->
-  <gazebo reference="caster_link">
+  <!-- Zero friction on casters so they don't resist turning -->
+  <gazebo reference="caster_front_link">
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+  </gazebo>
+
+  <gazebo reference="caster_rear_link">
     <mu1>0.0</mu1>
     <mu2>0.0</mu2>
   </gazebo>
