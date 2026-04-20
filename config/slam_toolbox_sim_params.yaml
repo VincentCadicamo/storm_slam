@@ -14,8 +14,8 @@ slam_toolbox:
 
     # Real wheel odometry is available in simulation (diff drive plugin),
     # so use non-zero travel thresholds to skip redundant scans.
-    minimum_travel_distance: 0.1
-    minimum_travel_heading: 0.0872  # ~5 degrees
+    minimum_travel_distance: 0.0
+    minimum_travel_heading: 0.0
 
     # Narrower search window vs real-robot params since we have odom as a prior
     correlation_search_space_dimension: 0.3

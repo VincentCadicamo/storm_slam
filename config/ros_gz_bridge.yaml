@@ -32,7 +32,7 @@
 
 # Joint states for robot_state_publisher (wheel angles)
 - ros_topic_name: "/joint_states"
-  gz_topic_name: "/world/storm_world/model/storm_robot/joint_state"
+  gz_topic_name: "/joint_states"
   ros_type_name: "sensor_msgs/msg/JointState"
   gz_type_name: "gz.msgs.Model"
   direction: GZ_TO_ROS
