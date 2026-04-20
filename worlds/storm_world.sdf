@@ -13,7 +13,7 @@
     <!-- Sensors plugin is required for GPU LiDAR to render -->
     <plugin filename="ignition-gazebo-sensors-system"
             name="ignition::gazebo::systems::Sensors">
-      <render_engine>ogre2</render_engine>
+      <render_engine>ogre</render_engine>
     </plugin>
     <plugin filename="ignition-gazebo-user-commands-system"
             name="ignition::gazebo::systems::UserCommands"/>
