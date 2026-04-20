@@ -81,7 +81,17 @@ def generate_launch_description():
         output='screen'
     )
 
-    # 5a. 2D SLAM (SLAM Toolbox) — delayed 5s to ensure /clock is available
+    # 5. RViz with pre-configured displays (map, scan, point cloud, robot model, odom)
+    rviz = Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        arguments=['-d', os.path.join(pkg, 'config', 'slam_viz.rviz')],
+        parameters=[{'use_sim_time': use_sim_time}],
+        output='screen'
+    )
+
+    # 6a. 2D SLAM (SLAM Toolbox) — delayed 5s to ensure /clock is available
     #     before SLAM nodes with use_sim_time:true initialize
     slam_2d = TimerAction(
         period=5.0,
@@ -96,7 +106,7 @@ def generate_launch_description():
         ]
     )
 
-    # 5b. 3D SLAM (RTAB-Map + ICP odometry) — same delay
+    # 6b. 3D SLAM (RTAB-Map + ICP odometry) — same delay
     slam_3d = TimerAction(
         period=5.0,
         actions=[
@@ -117,6 +127,7 @@ def generate_launch_description():
         rsp,
         spawn_robot,
         bridge,
+        rviz,
         slam_2d,
         slam_3d,
     ])
