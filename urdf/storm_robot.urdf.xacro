@@ -181,6 +181,7 @@
   <gazebo reference="velodyne">
     <sensor name="vlp16" type="gpu_lidar">
       <topic>/velodyne_points</topic>
+      <gz_frame_id>velodyne</gz_frame_id>
       <update_rate>10</update_rate>
       <lidar>
         <scan>
