@@ -116,6 +116,7 @@ def generate_launch_description():
         name='rviz2',
         arguments=['-d', os.path.join(pkg, 'config', 'slam_viz.rviz')],
         parameters=[{'use_sim_time': use_sim_time}],
+        additional_env={'LIBGL_ALWAYS_SOFTWARE': '1'},
         output='screen'
     )
 
