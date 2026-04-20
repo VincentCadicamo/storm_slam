@@ -10,7 +10,7 @@
 
 # VLP16 point cloud — GPU lidar publishes PointCloudPacked on the gz side
 - ros_topic_name: "/velodyne_points"
-  gz_topic_name: "/velodyne_points"
+  gz_topic_name: "/velodyne_points/points"
   ros_type_name: "sensor_msgs/msg/PointCloud2"
   gz_type_name: "gz.msgs.PointCloudPacked"
   direction: GZ_TO_ROS
