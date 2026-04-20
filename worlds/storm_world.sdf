@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<sdf version="1.10">
+<sdf version="1.8">
   <world name="storm_world">
 
     <physics name="1ms" type="ignored">
@@ -7,18 +7,18 @@
       <real_time_factor>1.0</real_time_factor>
     </physics>
 
-    <!-- Required world plugins -->
-    <plugin filename="gz-sim-physics-system"
-            name="gz::sim::systems::Physics"/>
+    <!-- Required world plugins (Ignition Fortress / ign-gazebo6 naming) -->
+    <plugin filename="ignition-gazebo-physics-system"
+            name="ignition::gazebo::systems::Physics"/>
     <!-- Sensors plugin is required for GPU LiDAR to render -->
-    <plugin filename="gz-sim-sensors-system"
-            name="gz::sim::systems::Sensors">
+    <plugin filename="ignition-gazebo-sensors-system"
+            name="ignition::gazebo::systems::Sensors">
       <render_engine>ogre2</render_engine>
     </plugin>
-    <plugin filename="gz-sim-user-commands-system"
-            name="gz::sim::systems::UserCommands"/>
-    <plugin filename="gz-sim-scene-broadcaster-system"
-            name="gz::sim::systems::SceneBroadcaster"/>
+    <plugin filename="ignition-gazebo-user-commands-system"
+            name="ignition::gazebo::systems::UserCommands"/>
+    <plugin filename="ignition-gazebo-scene-broadcaster-system"
+            name="ignition::gazebo::systems::SceneBroadcaster"/>
 
     <light name="sun" type="directional">
       <cast_shadows>true</cast_shadows>

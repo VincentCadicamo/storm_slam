@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 <robot name="storm_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:include filename="$(find velodyne_description)/urdf/VLP-16.urdf.xacro"/>
-
   <!-- ===== Links ===== -->
 
   <link name="base_footprint"/>
@@ -78,14 +76,14 @@
     <axis xyz="0 1 0"/>
   </joint>
 
-  <!-- Caster (passive front wheel for stability) -->
+  <!-- Caster — fixed box instead of sphere to avoid DART physics assertion -->
   <link name="caster_link">
     <visual>
-      <geometry><sphere radius="0.05"/></geometry>
+      <geometry><box size="0.1 0.1 0.1"/></geometry>
       <material name="grey"/>
     </visual>
     <collision>
-      <geometry><sphere radius="0.05"/></geometry>
+      <geometry><box size="0.1 0.1 0.1"/></geometry>
     </collision>
     <inertial>
       <mass value="0.5"/>
@@ -99,18 +97,55 @@
     <origin xyz="0.25 0 -0.1" rpy="0 0 0"/>
   </joint>
 
-  <!-- VLP-16: mounted 0.876m above base_link to match real hardware offset -->
-  <xacro:VLP-16 parent="base_link" name="velodyne" topic="/velodyne_points"
-                hz="10" samples="1800" gpu="true">
+  <!-- VLP-16: mounting plate -->
+  <link name="velodyne_base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.0516" length="0.0717"/></geometry>
+      <material name="dark_grey"><color rgba="0.2 0.2 0.2 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.0516" length="0.0717"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.1"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+
+  <joint name="velodyne_base_mount_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="velodyne_base_link"/>
+    <!-- 0.876m matches the real hardware offset used in master_launch.py -->
     <origin xyz="0 0 0.876" rpy="0 0 0"/>
-  </xacro:VLP-16>
+  </joint>
 
-  <!-- ===== Gazebo plugins ===== -->
+  <!-- VLP-16: sensor frame (origin of published point cloud) -->
+  <link name="velodyne">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.0516" length="0.0717"/></geometry>
+      <material name="dark_grey"/>
+    </visual>
+    <inertial>
+      <mass value="0.83"/>
+      <inertia ixx="0.000827" ixy="0" ixz="0" iyy="0.000827" iyz="0" izz="0.000827"/>
+    </inertial>
+  </link>
 
-  <!-- Differential drive: publishes odom and odom->base_link TF -->
+  <joint name="velodyne_base_scan_joint" type="fixed">
+    <parent link="velodyne_base_link"/>
+    <child link="velodyne"/>
+    <origin xyz="0 0 0.03585" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ===== Gazebo plugins (Ignition Fortress / ign-gazebo6 naming) ===== -->
+
+  <!-- Differential drive: publishes /odom and odom->base_link TF -->
   <gazebo>
-    <plugin filename="gz-sim-diff-drive-system"
-            name="gz::sim::systems::DiffDrive">
+    <plugin filename="ignition-gazebo-diff-drive-system"
+            name="ignition::gazebo::systems::DiffDrive">
       <left_joint>wheel_left_joint</left_joint>
       <right_joint>wheel_right_joint</right_joint>
       <wheel_separation>0.4</wheel_separation>
@@ -128,26 +163,25 @@
     </plugin>
   </gazebo>
 
-  <!-- Joint state publisher: needed by robot_state_publisher -->
+  <!-- Joint state publisher: feeds robot_state_publisher -->
   <gazebo>
-    <plugin filename="gz-sim-joint-state-publisher-system"
-            name="gz::sim::systems::JointStatePublisher">
+    <plugin filename="ignition-gazebo-joint-state-publisher-system"
+            name="ignition::gazebo::systems::JointStatePublisher">
       <topic>joint_states</topic>
     </plugin>
   </gazebo>
 
-  <!-- Caster friction set to near-zero so it doesn't resist turning -->
+  <!-- Low friction on caster so it doesn't resist turning -->
   <gazebo reference="caster_link">
     <mu1>0.0</mu1>
     <mu2>0.0</mu2>
   </gazebo>
 
-  <!-- VLP16 GPU LiDAR sensor override: 16-beam, ±15°, 0.3–25m, 10Hz -->
+  <!-- VLP16 GPU LiDAR sensor: 16-beam, ±15°, 0.3–25m, 10Hz -->
   <gazebo reference="velodyne">
     <sensor name="vlp16" type="gpu_lidar">
       <topic>/velodyne_points</topic>
       <update_rate>10</update_rate>
-      <gz_frame_id>velodyne</gz_frame_id>
       <lidar>
         <scan>
           <horizontal>
