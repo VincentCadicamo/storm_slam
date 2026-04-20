@@ -6,26 +6,28 @@
   <link name="base_footprint"/>
 
   <link name="base_link">
+    <!-- Chassis offset upward so bottom sits above wheel axle, only wheels touch ground -->
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="0 0 0.15" rpy="0 0 0"/>
       <geometry><box size="0.6 0.4 0.3"/></geometry>
       <material name="grey"><color rgba="0.5 0.5 0.5 1"/></material>
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="0 0 0.15" rpy="0 0 0"/>
       <geometry><box size="0.6 0.4 0.3"/></geometry>
     </collision>
     <inertial>
       <mass value="20.0"/>
-      <origin xyz="0 0 0"/>
+      <origin xyz="0 0 0.15"/>
       <inertia ixx="0.5" ixy="0" ixz="0" iyy="0.5" iyz="0" izz="0.5"/>
     </inertial>
   </link>
 
+  <!-- base_link origin is at wheel axle height (0.1m above ground) -->
   <joint name="base_footprint_joint" type="fixed">
     <parent link="base_footprint"/>
     <child link="base_link"/>
-    <origin xyz="0 0 0.15" rpy="0 0 0"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
   </joint>
 
   <!-- Left wheel -->
@@ -48,7 +50,7 @@
   <joint name="wheel_left_joint" type="continuous">
     <parent link="base_link"/>
     <child link="wheel_left_link"/>
-    <origin xyz="0 0.2 -0.05" rpy="0 0 0"/>
+    <origin xyz="0 0.2 0" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
   </joint>
 
@@ -72,7 +74,7 @@
   <joint name="wheel_right_joint" type="continuous">
     <parent link="base_link"/>
     <child link="wheel_right_link"/>
-    <origin xyz="0 -0.2 -0.05" rpy="0 0 0"/>
+    <origin xyz="0 -0.2 0" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
   </joint>
 
@@ -99,10 +101,17 @@
 
   <!-- VLP-16: mounting plate -->
   <link name="velodyne_base_link">
+    <!-- LiDAR head -->
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry><cylinder radius="0.0516" length="0.0717"/></geometry>
       <material name="dark_grey"><color rgba="0.2 0.2 0.2 1"/></material>
+    </visual>
+    <!-- Mounting pole: spans from chassis top (0.3m above base_link) up to this link (0.876m above base_link) -->
+    <visual>
+      <origin xyz="0 0 -0.288" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.025" length="0.576"/></geometry>
+      <material name="dark_grey"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0"/>
